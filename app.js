@@ -1,60 +1,28 @@
-var input = document.querySelector('input');
-var button = document.querySelector('button');
-var form = document.querySelector('form');
-var todos = document.querySelector('.todos')
-form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    let val = input.value.trim();
-    if (val) {
-        addTodoElement({
-            text: val,
-
-        })
-        saveTodoList();
-
-
+const num1 = Math.ceil(Math.random() * 10);
+const num2 = Math.ceil(Math.random() * 10);
+const questionEl = document.getElementById("question");
+const formEl = document.getElementById("form");
+const inputEl = document.getElementById("input");
+const scoreEl = document.getElementById("score");
+let score = JSON.parse(localStorage.getItem("score"));
+if (!score) {
+    score = 0;
+}
+scoreEl.innerText = `Score:${score}`;
+questionEl.innerText = `What is ${num1} multiply by ${num2}?`;
+const correctAns = num1 * num2;
+formEl.addEventListener("submit", () => {
+    const userAns = +inputEl.value;
+    if (userAns === correctAns) {
+        score++;
+        updateLocalStorage();
     }
-    input.value = '';
+    else {
+        score--;
+        updateLocalStorage();
+    }
+
 })
-function addTodoElement(todo) {
-    //     <li>
-    //     <span>Test</span>
-    //     <i class="far fa-trash-alt"></i>
-    // </li>
-    var li = document.createElement('li');
-    li.innerHTML = ` <span>${todo.text}</span>
-    <i class="far fa-trash-alt"></i>
- </li>`
-    if (todo.status === 'completed') {
-        li.setAttribute('class', 'completed');
-    }
-    li.addEventListener('click', function () {
-        this.classList.toggle('completed')
-        saveTodoList()
-    })
-    li.querySelector('i').addEventListener('click', function () {
-        this.parentElement.remove();
-        saveTodoList()
-    })
-    todos.appendChild(li);
+function updateLocalStorage() {
+    localStorage.setItem("score", JSON.stringify(score))
 }
-function saveTodoList() {
-    let todoList = document.querySelectorAll('li');
-    let todoStorage = [];
-    todoList.forEach(function (item) {
-        let text = item.querySelector('span').innerText;
-        let status = item.getAttribute('class');
-        todoStorage.push({
-            text,
-            status
-        })
-    })
-    localStorage.setItem('todoList', JSON.stringify(todoStorage));
-}
-function init() {
-    let data = JSON.parse(localStorage.getItem('todoList'));
-    data.forEach(function (item) {
-        addTodoElement(item)
-    })
-}
-init()
