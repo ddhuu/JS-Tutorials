@@ -1,28 +1,11 @@
-const num1 = Math.ceil(Math.random() * 10);
-const num2 = Math.ceil(Math.random() * 10);
-const questionEl = document.getElementById("question");
-const formEl = document.getElementById("form");
-const inputEl = document.getElementById("input");
-const scoreEl = document.getElementById("score");
-let score = JSON.parse(localStorage.getItem("score"));
-if (!score) {
-    score = 0;
-}
-scoreEl.innerText = `Score:${score}`;
-questionEl.innerText = `What is ${num1} multiply by ${num2}?`;
-const correctAns = num1 * num2;
-formEl.addEventListener("submit", () => {
-    const userAns = +inputEl.value;
-    if (userAns === correctAns) {
-        score++;
-        updateLocalStorage();
-    }
-    else {
-        score--;
-        updateLocalStorage();
-    }
-
+const textareaEl = document.getElementById("textarea")
+const totalCounterEl = document.getElementById("total-counter")
+const remainCounter = document.getElementById("remaining-counter")
+textareaEl.addEventListener("keyup", () => {
+    updateCounter()
 })
-function updateLocalStorage() {
-    localStorage.setItem("score", JSON.stringify(score))
+updateCounter()
+function updateCounter() {
+    totalCounterEl.innerText = textareaEl.value.length
+    remainCounter.innerText = textareaEl.getAttribute("maxLength") - textareaEl.value.length
 }
